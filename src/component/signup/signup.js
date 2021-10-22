@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {Link} from 'react-router-dom';
-import {Card, Form, Button, Container, FloatingLabel} from "react-bootstrap";
+import {Card, Form, Button, Container, FloatingLabel, Alert} from "react-bootstrap";
 import {useAuth} from "../../context/AuthContext"
 
 function Signup(){
@@ -10,7 +10,7 @@ function Signup(){
     const [message, setMessage] = useState('')
     const [loading, setLoading] = useState(false)
 
-    const [userData, setUserData] = useState({username:'',password:'', confirmPassword:'', email:'', displayName:''})
+    const [userData, setUserData] = useState({username:'',password:'', confirmPassword:'', email:'', displayname:''})
 
     const handleInputChange = e => {
         const { name, value } = e.target
@@ -18,15 +18,15 @@ function Signup(){
         setUserData({ ...userData, [name]:value })
     }
 
-    const onSubmit = (e) =>{
-        if(userData.password != userData.confirmPassword){
+    const handleSubmit = (e) =>{
+        if(userData.password !== userData.confirmPassword){
             setError("Password doesn't match");
         }
         e.preventDefault()
         setLoading(true)
         setError("")
-        signup(userData.username, userData.password, userData.email, userData.displayName).then(() => {
-                setMessage("Successfully Update Your Password")
+        signup(userData.username, userData.password, userData.email, userData.displayname).then(() => {
+                setMessage("Successfully Created Your Account")
               })
               .catch( error => {
                 setError(error.message);
@@ -42,7 +42,9 @@ function Signup(){
         <Card border="dark" className="mb-2">
             <Card.Header>  <Card.Title className="text-center">USER REGISTRATION</Card.Title> </Card.Header>
             <Card.Body>
-                <Form>
+                {error && <Alert variant="danger">{error}</Alert>}
+                {message && <Alert variant="success">{message}</Alert>}
+                <Form className="mx-3" onSubmit={handleSubmit} >
                     <Form.Group>
                     <FloatingLabel
                         controlId="floatingInput"
@@ -53,6 +55,7 @@ function Signup(){
                                 placeholder="Username"
                                 name="username"
                                 onChange = {handleInputChange}
+                                required
                                 >
                              </Form.Control>
                     </FloatingLabel>
@@ -69,6 +72,7 @@ function Signup(){
                                 placeholder="Password"
                                 name="password"
                                 onChange = {handleInputChange}
+                                required
                                 >
                              </Form.Control>
                         </FloatingLabel>
@@ -85,6 +89,7 @@ function Signup(){
                                 placeholder="Confirm Password"
                                 name="confirmPassword"
                                 onChange = {handleInputChange}
+                                required
                                 >
                              </Form.Control>
                         </FloatingLabel>
@@ -101,6 +106,7 @@ function Signup(){
                                 placeholder="Email Address"
                                 name="email"
                                 onChange = {handleInputChange}
+                                required
                                 >
                              </Form.Control>
                         </FloatingLabel>
@@ -115,15 +121,16 @@ function Signup(){
                             <Form.Control
                                 type="text"
                                 placeholder="Dispaly Name"
-                                name="displayName"
+                                name="displayname"
                                 onChange = {handleInputChange}
+                                required
                                 >
                              </Form.Control>
                         </FloatingLabel>
                              <Form.Text className="text-danger" muted></Form.Text>
                     </Form.Group>
                     
-                    <Button disabled={true} className="w-100 mt-2" type="submit ">Sign-Up</Button>
+                    <Button disabled={loading} className="w-100 mt-2" type="submit ">Sign-Up</Button>
                 </Form>
              </Card.Body>
         </Card>

@@ -21,18 +21,20 @@ function App() {
 
     <Router>
       <AuthProvider>
-        <div className="App">
+        <Switch>
+          <div className="App">
 
-        <Header/>
-        <Route exact path='/login' component={Login}/>
-        <Route exact path='/signup' component={Signup}/>
-        <PrivateRoute exact path='/user' component={User}/>
-        <Route exact path='/resturant' component={Resturant}/>
-        <Footer/>
-    
-    
+          <Header/>
+          <Route exact path='/login' component={Login}/>
+          <Route exact path='/signup' component={Signup}/>
+          <PrivateRoute exact path='/user' component={User}/>
+          <Route exact path='/resturant' component={Resturant}/>
+          <Footer/>
+      
+      
 
-        </div>
+          </div>
+        </Switch>
       </AuthProvider>
     </Router>
   );
