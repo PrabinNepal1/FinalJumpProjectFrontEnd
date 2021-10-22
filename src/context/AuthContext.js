@@ -1,5 +1,4 @@
 import React, {useContext, useState, useEffect} from "react";
-import {useHistory} from "react-router-dom";
 
 import axios from 'axios';
 
@@ -16,7 +15,6 @@ export function AuthProvider({children}) {
 
     const [currentUser, setCurrentUser] = useState()
     const [loading, setLoading] = useState(true)
-    const history = useHistory();
 
 async function signup(username, password, email, displayname){
   return await axios
@@ -37,7 +35,6 @@ async function login(username, password){
           .then((response) => {
               
               sessionStorage.setItem("user", JSON.stringify(response.data));
-              history.push('/')
               return response.data;
           })
 }
