@@ -9,7 +9,7 @@ import {AuthProvider} from "./context/AuthContext";
 
 
 import Header from "./component/header/header";
-import Footer from './component/footer/Footer';
+import Footer from './component/footer/footer';
 import Login from './component/login/login';
 import Signup from './component/signup/signup';
 import User from './component/user/user';
@@ -32,7 +32,7 @@ function App() {
           <PrivateRoute exact path='/user' component={User}/>
           <Route exact path='/resturant' component={Resturant}/>
           <Route exact path='/resturant/add' component={CreateResturant}/>
-          <Route exact path='/add/review/' component={CreateReview}/>
+          <Route exact path='/add/review/:id' component={CreateReview}/>
           <Footer/>
       
       

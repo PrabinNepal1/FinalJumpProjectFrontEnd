@@ -10,8 +10,16 @@ class ReviewService {
       return  axios.get(`${baseurl}/restaurants`);
     }
  
-    createReview(id){
-      return  axios.post(`${baseurl}/add/review/${id}`)
+    createReview(review){
+      const config = {
+        headers: {Authorization : "Bearer" + sessionStorage.getItem("user")}
+       };
+
+      return  axios.post(`${baseurl}/add/review/${review.id}`,
+            review
+      ,{
+        config
+      })
     }
 }
 
