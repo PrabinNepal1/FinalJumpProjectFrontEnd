@@ -9,7 +9,7 @@ import {AuthProvider} from "./context/AuthContext";
 
 
 import Header from "./component/header/header";
-import Footer from './component/footer/Footer';
+import Footer from './component/footer/footer';
 import Login from './component/login/login';
 import Signup from './component/signup/signup';
 import User from './component/user/user';

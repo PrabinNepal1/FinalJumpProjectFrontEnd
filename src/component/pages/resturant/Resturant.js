@@ -1,4 +1,5 @@
 import React from 'react';
+import Search from '../../search/search';
 import Card from 'react-bootstrap/Card'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
@@ -42,19 +43,45 @@ class Resturant extends React.Component
 
     }
 
+    myFunction() {
+  // Declare variables
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("myTable");
+  tr = table.getElementsByTagName("tr");
+
+  // Loop through all table rows, and hide those who don't match the search query
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[0];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+}
+
 
 
   render (){
+
     return(
 
           <div>
             <h1>Resturant List</h1>
+            {/* <div>
+              <Search />
+            </div> */}
             <div className = "row">
               <button className="btn btn-primary" onClick={this.addResturant}> Add Resturant</button>
             </div>
 
-            
-            <table className= "table table-striped">
+            <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for restuarants"></input>
+            <table className= "table table-striped" id="myTable">
               <thead>
                 <tr>
                   <td>Resturant Id</td>
