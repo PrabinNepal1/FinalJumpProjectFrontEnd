@@ -6,9 +6,11 @@ import {useAuth} from "../../context/AuthContext"
 
 function Login(){
 
-    const {login} = useAuth()
+    const {login, authenticate} = useAuth()
     const [error, setError] = useState('')
     const [message, setMessage] = useState('')
+    const [authError, setAuthError] = useState('')
+    const [authMessage, setAuthMessage] = useState('')
     const [loading, setLoading] = useState(false)
     const history = useHistory()
 
@@ -23,19 +25,18 @@ function Login(){
     const handleSubmit = (e) =>{
         e.preventDefault()
         setLoading(true)
-        setError("")
-        login(userData.username, userData.password).then(() => {
-                setMessage("Login Successful!")
-              })
-              .then(() => {
-                history.push("/")
-              })
-              .catch( error => {
-                setError(error.message);
-              })
-              .finally(() => {
-                setLoading(false)
-              })
+        setError("") 
+        authenticate(userData.username, userData.password).then(() => {
+        setAuthMessage("Authentication Successful!")
+        })
+        .then(() => {
+        history.push("/")
+        })
+        .catch( error => {
+        setAuthError(error.message);
+        }) .finally(() => {
+        setLoading(false)
+        })
     }
 
     return(
@@ -46,7 +47,8 @@ function Login(){
             <Card.Body>
                 {error && <Alert variant="danger">{error}</Alert>}
                 {message && <Alert variant="success">{message}</Alert>}
-                
+                {authError && <Alert variant="danger">{authError}</Alert>}
+                {authMessage && <Alert variant="success">{authMessage}</Alert>}
                 <Form className="mx-3" onSubmit={handleSubmit} >
                 
                 <Form.Group>

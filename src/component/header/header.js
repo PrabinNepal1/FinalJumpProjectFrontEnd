@@ -33,17 +33,15 @@ function Header(){
                         <Nav.Link  href="#AboutUS">About Us</Nav.Link>
                         <Nav.Link  href="#ContactUS">Contact Us</Nav.Link>
                         </Nav>
-                        {currentUser ? (
-                            <Nav>
-                                <Nav.Link> <Link to="/User">{currentUser.sub}'s Profile</Link></Nav.Link>
-                                <Nav.Link> <Link to="/" onClick={handleLogout}>Logout</Link></Nav.Link>
-                            </Nav>
-                        ):(
-                            <Nav>
+                        {currentUser ? (<Nav>
+                            <Nav.Link> <Link to="/User">{currentUser.sub}'s Profile</Link></Nav.Link>
+                            <Nav.Link> <Link to="/" onClick={handleLogout}>Logout</Link></Nav.Link>
+                         </Nav>):
+                         (<Nav>
                                 <Nav.Link> <Link to="/Login">Login</Link></Nav.Link>
                                 <Nav.Link> <Link to="/Signup">Signup</Link></Nav.Link>
-                            </Nav> 
-                        )}
+                         </Nav> )
+                         }
                         
                     </Navbar.Collapse>
                 </Container>

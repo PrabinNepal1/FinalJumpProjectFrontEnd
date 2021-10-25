@@ -14,13 +14,14 @@ import Login from './component/login/login';
 import Signup from './component/signup/signup';
 import User from './component/user/user';
 import Resturant from './component/restaurant/restaurant';
+import CreateResturant from './component/restaurant/CreateResturant';
 
 function App() {
   return (
 
-
+<AuthProvider>
     <Router>
-      <AuthProvider>
+      
         <Switch>
           <div className="App">
 
@@ -29,14 +30,15 @@ function App() {
           <Route exact path='/signup' component={Signup}/>
           <PrivateRoute exact path='/user' component={User}/>
           <Route exact path='/resturant' component={Resturant}/>
+          <Route exact path='/resturant/add' component={CreateResturant}/>
           <Footer/>
       
       
 
           </div>
         </Switch>
-      </AuthProvider>
     </Router>
+  </AuthProvider>
   );
 }
 

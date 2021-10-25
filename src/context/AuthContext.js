@@ -15,6 +15,9 @@ export function AuthProvider({children}) {
 
     const [currentUser, setCurrentUser] = useState()
     const [loading, setLoading] = useState(true)
+    const [token, setToken] = useState()
+    const [userDetails, setUserDetails] =useState([])
+    
 
 async function signup(username, password, email, displayname){
   return await axios
@@ -26,14 +29,14 @@ async function signup(username, password, email, displayname){
           });
 }
 
-async function login(username, password){
+async function authenticate(username, password){
   return await axios
           .post(baseurl + "/authenticate", {
                   username,
                   password
           })
           .then((response) => {
-              
+              setToken(JSON.stringify(response.data));
               sessionStorage.setItem("user", JSON.stringify(response.data));
               return response.data;
           })
@@ -50,24 +53,55 @@ function parseJwt(token) {
   return JSON.parse(window.atob(base64));
 }
 
+async function getUserData(username){
+  const config = {
+    headers: {Authorization : "Bearer" + sessionStorage.getItem("user")}
+   };
+
+   await axios.get((baseurl + "/user/username/" + username),{
+                    config
+                })
+              .then((response) => {
+                  setUserDetails(response.data);
+                })
+}
+
+async function update(username, password, email, displayname){
+  const config = {
+    headers: {
+      Authorization : "Bearer" + sessionStorage.getItem("user")}
+   };
+  return await axios
+          .patch((baseurl + "/user"), {
+            "username": username,
+            "password": password
+          },{
+            config
+        });
+}
+
 useEffect(() =>{
     const token = sessionStorage.getItem("user");
 
-    if(sessionStorage.getItem("user") != null ){
-        setCurrentUser(parseJwt(token))
+    if(token != null ){
+        setCurrentUser(parseJwt(token));
       }
     else{
-        setCurrentUser(null);
+      setCurrentUser(null);
     }
     setLoading(false)
+
   },[])
 
   const value = {
     currentUser,
-    login,
+    authenticate,
+    token,
     signup,
-    logout
-
+    logout,
+    update,
+    getUserData,
+    userDetails
   }
 
   return (
