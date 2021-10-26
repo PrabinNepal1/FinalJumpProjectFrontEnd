@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import {Link, useHistory} from 'react-router-dom';
-import Card from 'react-bootstrap/Card'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
+import  {useHistory} from 'react-router-dom';
+
 
 import ResturantService from '../../../service/ResturantService';
-import ReviewService from '../../../service/ReviewService';
-import { generatePath } from 'react-router';
+
 
 import {useAuth} from "../../../context/AuthContext";
 import CreateReview from "../../curd/CreateReview"
