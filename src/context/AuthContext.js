@@ -70,19 +70,20 @@ async function update(username, password){
 
   const token = sessionStorage.getItem("user")
   const jwtToken = JSON.parse(token)["jwt"]
+  console.log(jwtToken)
       
   const config = {
-    headers: {
-      Authorization : `Bearer ` + jwtToken}
+      Authorization : `Bearer ` + jwtToken
    };
-  return await axios
+  await axios
           .patch(baseurl + "/user", {
-            "username": username,
-            "password": password
+           username,
+           password
           },{
-            config
+            headers: config
           }  
         );
+  return authenticate(username, password);
 }
 
 useEffect(() =>{
