@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Link, useHistory} from 'react-router-dom';
 import {Container, Nav, Navbar, Alert} from 'react-bootstrap';
 import { useAuth } from '../../context/AuthContext';
@@ -20,6 +20,7 @@ function Header(){
         }
   
       }
+
 
     return (
         <>

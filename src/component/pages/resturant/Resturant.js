@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import {Link, useHistory} from 'react-router-dom';
 import Card from 'react-bootstrap/Card'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
@@ -7,50 +8,52 @@ import ResturantService from '../../../service/ResturantService';
 import ReviewService from '../../../service/ReviewService';
 import { generatePath } from 'react-router';
 
-class Resturant extends React.Component
+import {useAuth} from "../../../context/AuthContext";
+import CreateReview from "../../curd/CreateReview"
+
+function Resturant()
 {
-    constructor(props){
-      super(props)
-      
-      this.state ={
-        resturants:[]
-      }
-      this.addResturant = this.addResturant.bind(this);
-      this.addReview = this.addReview.bind(this);
+
+  const [resturants, setResturants] = useState([]);
+  const history = useHistory();
+  const {currentUser} = useAuth();
+  const [toggleModal, setToggleModal] = useState(false)
+  const closeModal = () => setToggleModal(false)
+  const [resID, setResID] = useState()
 
 
+  function addResturant(){
+    history.push('/resturant/add');
+  }
+ 
+  const handleToggle = () => {
+    if (!currentUser) {
+        history.push('/login');
     }
-
-
-    componentDidMount(){
-      ResturantService.getResturants().then((res) => {
-        this.setState({ resturants: res.data});
-      })
+    else{
+      setToggleModal(true)
     }
-    componentDidUpdate(){
-      ReviewService.getResturants().then((res) => {
-      this.setState({ resturants: res.data});
-      })
-    }
-    addResturant(){
-      this.props.history.push('/resturant/add');
-    }
-    addReview(id){
-      
-        this.props.history.push('/add/review');
-  
-
-    }
+  }
 
 
 
-  render (){
+  useEffect(()=>{
+    ResturantService.getResturants().then((res) => 
+      setResturants(res.data));
+  },[])
+
+
+
+
+
     return(
 
           <div>
             <h1>Resturant List</h1>
             <div className = "row">
-              <button className="btn btn-primary" onClick={this.addResturant}> Add Resturant</button>
+             { 
+               currentUser && <button className="btn btn-primary" onClick={addResturant}> Add Resturant</button>
+                }
             </div>
 
             
@@ -70,17 +73,25 @@ class Resturant extends React.Component
               </thead>
               <tbody>
                   {
-                    this.state.resturants.map(
+                    resturants.map(
                       resturants =>
                       <tr key={resturants.id}>
                          <td>{resturants.id}</td>
                          <td>{resturants.name}</td> 
                          <td>{resturants.address}</td> 
                          <td>{resturants.description}</td> 
-                         <td>{resturants.reviews.map}<button className="btn btn-primary" onClick= {() => this.addReview(resturants.id)}> Add Review</button></td>  
+                         <td>{resturants.reviews.map(
+                           review =>  
+                           <tr key={review.id}>
+                                <td>Rating: {review.rating}</td>
+                                <td>{review.description}</td>
+                                </tr>
+                         )}<button className="btn btn-primary" onClick={() => {handleToggle(); setResID(resturants.id);}}> Add Review</button></td>  
 
                       </tr>
                     )
+
+                   
 
                   }
 
@@ -90,9 +101,9 @@ class Resturant extends React.Component
 
             </table>
 
-
-
-
+            <CreateReview showUpdate={toggleModal} closeModal={closeModal} id={resID} />
+            
+            
 
           </div>
              
@@ -100,10 +111,7 @@ class Resturant extends React.Component
            
 
     )
-  };
-
-}  
-
+  }
 
 
 export default Resturant;
