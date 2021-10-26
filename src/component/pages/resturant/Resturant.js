@@ -20,8 +20,6 @@ function Resturant()
   const [toggleModal, setToggleModal] = useState(false)
   const closeModal = () => setToggleModal(false)
   const [resID, setResID] = useState()
-  
-
 
 
   function addResturant(){
@@ -34,7 +32,6 @@ function Resturant()
     }
     else{
       setToggleModal(true)
-      //setResID(id);
     }
   }
 
@@ -43,7 +40,7 @@ function Resturant()
   useEffect(()=>{
     ResturantService.getResturants().then((res) => 
       setResturants(res.data));
-  }, [])
+  },[])
 
 
 
@@ -106,7 +103,7 @@ function Resturant()
 
             <CreateReview showUpdate={toggleModal} closeModal={closeModal} id={resID} />
             
-            {console.log(resID)}
+            
 
           </div>
              

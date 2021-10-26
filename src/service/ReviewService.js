@@ -10,13 +10,21 @@ class ReviewService {
       return  axios.get(`${baseurl}/restaurants`);
     }
  
-    createReview(id){
+    createReview(id, rating, description){
+      
+      const token = sessionStorage.getItem("user")
+      const jwtToken = JSON.parse(token)["jwt"]
+      
+
       const config = {
-        headers: {Authorization : "Bearer " + sessionStorage.getItem("user")}
+        Authorization : "Bearer " + jwtToken
        };
 
       return  axios.post(`${baseurl}/add/review/${id}`,{
-        config
+          rating,
+          description
+      },{
+        headers: config
       })
     }
 }
