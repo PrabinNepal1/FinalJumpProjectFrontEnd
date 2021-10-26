@@ -1,7 +1,7 @@
 import axios from "axios";
 
 
-const baseurl = "http://localhost:8080/api";
+const baseurl = "http://52.15.184.114:8080/api";
 
 class ResturantService {
 
