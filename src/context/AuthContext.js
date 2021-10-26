@@ -55,7 +55,7 @@ function parseJwt(token) {
 
 async function getUserData(username){
   const config = {
-    headers: {Authorization : "Bearer" + sessionStorage.getItem("user")}
+    headers: {Authorization : "Bearer " + sessionStorage.getItem("user")}
    };
 
    await axios.get((baseurl + "/user/username/" + username),{
@@ -66,18 +66,18 @@ async function getUserData(username){
                 })
 }
 
-async function update(username, password, email, displayname){
+async function update(username, password){
   const config = {
     headers: {
-      Authorization : "Bearer" + sessionStorage.getItem("user")}
+      Authorization : "Bearer " + sessionStorage.getItem("user")}
    };
   return await axios
           .patch((baseurl + "/user"), {
             "username": username,
             "password": password
-          },{
+          },
             config
-        });
+        );
 }
 
 useEffect(() =>{

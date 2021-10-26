@@ -9,6 +9,7 @@ import ReviewService from '../../../service/ReviewService';
 import { generatePath } from 'react-router';
 
 import {useAuth} from "../../../context/AuthContext";
+import CreateReview from "../../curd/CreateReview"
 
 function Resturant()
 {
@@ -16,6 +17,9 @@ function Resturant()
   const [resturants, setResturants] = useState([]);
   const history = useHistory();
   const {currentUser} = useAuth();
+  const [toggleModal, setToggleModal] = useState(false)
+  const closeModal = () => setToggleModal(false)
+  const [resID, setResID] = useState()
   
 
 
@@ -24,25 +28,22 @@ function Resturant()
     history.push('/resturant/add');
   }
  
- function addReview(){
-
-      if(currentUser !== null ){
-        history.push(`/add/review/${resturants.id}`);
-      }else{
+  const handleToggle = () => {
+    if (!currentUser) {
         history.push('/login');
-      }
-    
-      
+    }
+    else{
+      setToggleModal(true)
+      //setResID(id);
+    }
   }
+
 
 
   useEffect(()=>{
     ResturantService.getResturants().then((res) => 
       setResturants(res.data));
   }, [])
-
-    
-    
 
 
 
@@ -82,10 +83,18 @@ function Resturant()
                          <td>{resturants.name}</td> 
                          <td>{resturants.address}</td> 
                          <td>{resturants.description}</td> 
-                         <td>{resturants.reviews.map}<button className="btn btn-primary" onClick= {() => addReview(resturants.id)}> Add Review</button></td>  
+                         <td>{resturants.reviews.map(
+                           review =>  
+                           <tr key={review.id}>
+                                <td>Rating: {review.rating}</td>
+                                <td>{review.description}</td>
+                                </tr>
+                         )}<button className="btn btn-primary" onClick={() => {handleToggle(); setResID(resturants.id);}}> Add Review</button></td>  
 
                       </tr>
                     )
+
+                   
 
                   }
 
@@ -95,9 +104,9 @@ function Resturant()
 
             </table>
 
-
-
-
+            <CreateReview showUpdate={toggleModal} closeModal={closeModal} id={resID} />
+            
+            {console.log(resID)}
 
           </div>
              

@@ -1,86 +1,88 @@
-import React, { Component } from 'react';
+import {Form, Button, Alert, Modal, FloatingLabel} from 'react-bootstrap'
+import React, {useState} from "react";
+import {useAuth} from "../../context/AuthContext"
 import ReviewService from '../../service/ReviewService';
 
-class CreateReview extends Component {
-    
-    constructor(props){
-        super(props)
+export default function CreateReview(props){
 
-        this.state= {
-            userId: '',
-            resturant: "",
-            id: '',
-            rating: '',
-            description: ''
-        }
-        // this.changeNameHandler = this.changeNameHandler.bind(this);
-        this.changeRatingHandler = this.changeRatingHandler.bind(this);
-        this.changeDescriptionHandler= this.changeDescriptionHandler.bind(this);
-        this.saveReview = this.saveReview.bind(this);
+    const {update} = useAuth()
+    const [error, setError] = useState('')
+    const [message, setMessage] = useState('')
+    const [loading, setLoading] = useState(false)
+
+    const [data, setData] = useState({rating:'', description:''})
+
+    const handleInputChange = e => {
+        const { name, value } = e.target
+
+        setData({ ...data, [name]:value })
     }
 
-    saveReview = (e) =>{
-        e.preventDefault();
-        let review = {id: this.state.id, rating: this.state.rating, description: this.state.description};
-        console.log('review =>' + JSON.stringify(review));
-
-        ReviewService.createReview(review).then(res =>{
-            this.props.history.push('/resturant');
-        });
+    const handleSubmit = (e) =>{
+            e.preventDefault()
+            setLoading(true)
+            setError("")
+            ReviewService.createReview(props.id, data.rating, data.description).then(() => {
+                    setMessage("Successfully Created Your Account")
+                  })
+                  .catch( error => {
+                    setError(error.message);
+                  })
+                  .finally(() => {
+                    setLoading(false)
+                  })
+       
     }
+    return(
+        <Modal aria-labelledby="contained-modal-title-vcenter" show={props.showUpdate} onHide={props.closeModal} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Write A Review</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+        {error && <Alert variant="danger">{error}</Alert>}
+        {message && <Alert variant="success">{message}</Alert>}
+        <Form className="mx-3" onSubmit={handleSubmit} >
+                    <Form.Group>
+                    <FloatingLabel
+                        controlId="floatingInput"
+                        label="Rating"
+                        className="mb-3">
+                            <Form.Control
+                                type="text"
+                                placeholder="Rating"
+                                name="rating"
+                                onChange = {handleInputChange}
+                                required
+                                >
+                             </Form.Control>
+                    </FloatingLabel>
+                             <Form.Text className="text-danger" muted></Form.Text>
+                    </Form.Group>
 
-    // changeNameHandler = (event) =>{
-    //     this.setState({name: event.target.value});
-    // }
-    changeRatingHandler = (event) =>{
-        this.setState({rating: event.target.value});
-    }
-    changeDescriptionHandler = (event) =>{
-        this.setState({description: event.target.value});
-    }
-    cancel(){
-        this.props.history.push('/resturant');
-    }
+                    <Form.Group>
+                    <FloatingLabel
+                        controlId="floatingInput"
+                        label="Description"
+                        className="mb-3">
+                            <Form.Control
+                                 as="textarea"
+                                type="text"
+                                placeholder="Write your review"
+                                name="description"
+                                onChange = {handleInputChange}
+                                required
+                                >
+                             </Form.Control>
+                        </FloatingLabel>
+                             <Form.Text className="text-danger" muted></Form.Text>
+                    </Form.Group>
 
-    
-    render() {
-        return (
-            <div>
-                <div className = "container">
-                    <div className = "row">
-                        <div className = "card col-md-6 offset-md-3 offset-md-3">
-                            <h3 className="text-center">Add Review</h3>
-                            <div className ="card-body">
-                                <form>
-                                    {/* <div className ="form-group">
-                                        <label>Name: </label>
-                                        <input placeholder="Name" name="name" className="form-control"
-                                                value={this.state.name} onChange={this.changeNameHandler}/>
-                                    </div> */}
-                                    <div className ="form-group">
-                                        <label>Rating: </label>
-                                        <input placeholder="Rating" name="rating" className="form-control"
-                                                value={this.state.rating} onChange={this.changeRatingHandler}/>
-                                    </div>
-                                    <div className ="form-group">
-                                        <label>Description: </label>
-                                        <input placeholder="Description" name="description" className="form-control"
-                                                value={this.state.description} onChange={this.changeDescriptionHandler}/>
-                                    </div>
+                    
+                    <Button disabled={loading} className="w-100 mt-2" type="submit ">Update</Button>
+                </Form>
 
+        </Modal.Body>
+        </Modal>
+    )
 
-                                    <button className = "btn btn-success" onClick={this.saveReview}> Add </button>
-                                    <button className = "btn btn-danger" onClick={this.cancel.bind(this)} style={{marginLeft: "10px"}}> Cancel </button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-
-
-                </div>
-            </div>
-        );
-    }
 }
-
-export default CreateReview;
