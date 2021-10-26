@@ -6,7 +6,7 @@ import {useAuth} from "../../context/AuthContext"
 
 function Login(){
 
-    const {login, authenticate} = useAuth()
+    const {authenticate} = useAuth()
     const [error, setError] = useState('')
     const [message, setMessage] = useState('')
     const [authError, setAuthError] = useState('')

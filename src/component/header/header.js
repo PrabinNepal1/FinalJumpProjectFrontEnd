@@ -6,7 +6,7 @@ import { useAuth } from '../../context/AuthContext';
 function Header(){
 
     const [error, setError] = useState("")
-    const {currentUser, logout} = useAuth()
+    const {currentUser, logout, isLoggedIn} = useAuth()
     const history = useHistory()
 
     async function handleLogout(){
@@ -20,8 +20,6 @@ function Header(){
         }
   
       }
-
-
     return (
         <>
             <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
@@ -35,7 +33,7 @@ function Header(){
                         <Nav.Link  href="#ContactUS">Contact Us</Nav.Link>
                         </Nav>
                         {currentUser ? (<Nav>
-                            <Nav.Link> <Link to="/User">{currentUser.sub}'s Profile</Link></Nav.Link>
+                            <Nav.Link> <Link to="/User">Your Profile</Link></Nav.Link>
                             <Nav.Link> <Link to="/" onClick={handleLogout}>Logout</Link></Nav.Link>
                          </Nav>):
                          (<Nav>

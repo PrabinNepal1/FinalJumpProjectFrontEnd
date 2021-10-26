@@ -14,6 +14,7 @@ export function useAuth(){
 export function AuthProvider({children}) {
 
     const [currentUser, setCurrentUser] = useState()
+    const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [loading, setLoading] = useState(true)
     const [token, setToken] = useState()
     const [userDetails, setUserDetails] =useState([])
@@ -37,6 +38,7 @@ async function authenticate(username, password){
           })
           .then((response) => {
               setToken(JSON.stringify(response.data));
+              setIsLoggedIn(true);
               sessionStorage.setItem("user", JSON.stringify(response.data));
               return response.data;
           })
@@ -44,6 +46,7 @@ async function authenticate(username, password){
 
 function logout(){
    sessionStorage.clear();
+   setIsLoggedIn(false);
 }
 
 function parseJwt(token) {
@@ -88,13 +91,19 @@ async function update(username, password){
 
 useEffect(() =>{
 
+  (async () => {
     const token = sessionStorage.getItem("user");
     
     setCurrentUser(parseJwt(token));
+
+    if(currentUser !== null){
+      setIsLoggedIn(true);
+    }
  
     setLoading(false)
+  })();
     
-  },[setCurrentUser])
+  },[isLoggedIn])
 
   const value = {
     currentUser,
@@ -104,7 +113,8 @@ useEffect(() =>{
     logout,
     update,
     getUserData,
-    userDetails
+    userDetails,
+    isLoggedIn
   }
 
   return (
